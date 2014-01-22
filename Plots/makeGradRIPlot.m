@@ -21,9 +21,9 @@ gradripro = reshape(gradriprob, 24, 11);
 
 % Smoothing Function
 
-h = 1/9*ones(3); % Simple averaging
+% h = 1/9*ones(3); % Simple averaging
 
-% h = .5*ones(3); h(2,2) = 1; h = 1/5 * h; %Weight center position most
+h = .5*ones(3); h(2,2) = 1; h = 1/5 * h; %Weight center position most
 
 
 % Plotting

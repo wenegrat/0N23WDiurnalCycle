@@ -7,13 +7,22 @@ close all
 clc
 
 % Define the time range
-trange = 1:1500;
+trades = 1:2061;
+calm = 2062:5373;
+coldtongue = 5374:5757;
+tiwwarm = 430:813; %Oct. 31 - Nov. 16th (16 days)
+tiwcold = 46:429;
+
+trange = tiwwarm;
 
 % Define Variables
 
 % Note Temp Bins need to be adjusted by time period
-% tempbins = -.25:.0125:.25;
-tempbins = -.4:.0125:.4; % Works OK for entire time period.
+if isequal(trange, trades)
+ tempbins = -.25:.0125:.25;
+else
+    tempbins = -.5:.0125:.5; % Works OK for entire time period.
+end
 
 sst = dataset.density.fulldepth.temps(1,:)';
 
@@ -42,13 +51,14 @@ sst = dataset.density.fulldepth.temps(1,:)';
 % Surface Heat Flux at Top
 % Temp, and Shear Flow
 %==========================================================================
-% makeShearPlot(dataset.variables.Emmpersec20mh, dataset.variables.Nmmpersec20mh, ...
-%     dataset.measures.uwndh, dataset.measures.vwndh, dataset.flux.netheat, ...
-%     dataset.density.fulldepth.fullmld, dataset, trange, tempbins);
+makeShearPlot(dataset.variables.Emmpersec20mh, dataset.variables.Nmmpersec20mh, ...
+    dataset.measures.uwndh, dataset.measures.vwndh, dataset.flux.netheat, ...
+    dataset.density.fulldepth.fullmld, dataset, trange, tempbins);
 
 
 %==========================================================================
 % Richardson Number
 % Bulk and Gradient
 %==========================================================================
-makeGradRIPlot(dataset, trange, [0 1]);
+makeGradRIPlot(dataset, trange, [ 0 5]);
+makeBulkRIPlot(dataset, trange, [0 .5]);
