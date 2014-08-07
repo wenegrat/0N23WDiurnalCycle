@@ -1,0 +1,11 @@
+delta = .2;
+f = linspace(24-12*delta, 24+12*delta, 24);
+
+for i=1:24
+    subplot(6,4, i)
+    cmri = complex_demodulate_tri(avmag, 1./f(i), tri);
+    plot(unwrap(cmri.phase(1:5967)));
+    title(num2str(f(i)));
+    ylim([-20 20])
+    xlim([1 5967])
+end

@@ -1,0 +1,19 @@
+function [out weekdates] = applyToWeek(input, func)
+%input should be of length 5967
+[ntimes ndepths] = size(input);
+
+numweeks = 35; %skipping last half week
+
+weekdates = datenum(2008, 10, 13, 3:24(3+24*7*numweeks), 0, 0); 
+
+counter = 1;
+for i=1:length(numweeks)
+    tempvar = input(counter:(counter+(24*7)),:);
+    if (ndepths>1)
+        tempvar = reshape(tempvar, 169*ndepths, 1);
+    end
+    out(i) = func(tempvar);
+    counter = counter + 24*7+1;
+end
+
+end

@@ -45,12 +45,14 @@ s = size(ts);
 f = exp( - 2 * pi * (0:s(1)-1)' * f * 1i );
 
 rp = conv(f.*ts, triangle, 'same');
+% rp = f.*ts;
 rp(1:length(triangle)) = NaN;
 rp(end-length(triangle):end) = NaN;
 % rp = feval( filt_func, B, A, ts .* repmat( f, s ./ size(f) ), varargin{:} );
 % rm = feval( filt_func, B, A, ts .* repmat( conj(f), s ./ size(f) ), varargin{:} ); 
 
 r.semimaj = 2.*abs(rp);
+r.phase = atan2(imag(rp), real(rp));
 % r.semimin = abs(rp) - abs(rm);
 % r.inc = mod((angle(rp) + angle(rm))/2,pi); 
 % r.phase = (angle(rp) - angle(rm))/2; 

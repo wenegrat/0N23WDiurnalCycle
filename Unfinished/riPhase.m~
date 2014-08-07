@@ -1,0 +1,42 @@
+function [hrhigh hrlow] = riPhase(trange, dataset)
+
+
+rimax = maxDaily(rivar(trange), dataset.descriptors.datesen(trange));
+rimin = minDaily(rivar(trange), dataset.descriptors.datesen(trange));
+
+
+numDays = ceil(length(times)/24);
+outh = NaN * zeros(numDays, 1);
+outl = outh;
+
+
+[~, i] = max(rivar(1:21));
+dv = datevec(dataset.descriptors.datesen(i));
+outh(1) = dv(4);
+[~, i] = min(rivar(1:21));
+dv = datevec(dataset.descriptors.datesen(i));
+outl(1) = dv(4);
+
+averageCounter = 22;%First Full Day (by GMT)
+for obsNum = 2:numDays-1
+    [~, i] = max(rivar(averageCounter:averageCounter+23));
+    dv = datevec(dataset.descriptors.datesen(i));
+    outh(obsNum) = dv(4);
+    [~, i] = min(rivar(averageCounter:averageCounter+23));
+    dv = datevec(dataset.descriptors.datesen(i));
+    outl(obsNum) = dv(4);
+    
+    
+    
+    averageCounter = averageCounter + 24;
+end
+
+%Finally do the partial last day
+out(end) = min(input(averageCounter:end));
+[~, i] = max(rivar(1:21));
+dv = datevec(dataset.descriptors.datesen(i));
+outh(1) = dv(4);
+[~, i] = min(rivar(1:21));
+dv = datevec(dataset.descriptors.datesen(i));
+outl(1) = dv(4);
+end

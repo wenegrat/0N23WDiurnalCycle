@@ -1,13 +1,17 @@
-function makeShearPlot(erel, nrel, wx, wy, flux, mld, ds, timerange, tempbins)
+function makeShearPlot(erel, nrel, wx, wy, flux, mld, av, rivar, ds, timerange, tempbins)
 %%
 % Make Plots
 %==========================================================================
+
+% riatmld = valAtMLD(rivar(timerange,:), ds.density.fulldepth.fullmldh(timerange), ds.deepadcp.riforwarddepths);
 
 %============================== Bin Data ==================================
 % Temperature Anomaly
 tempanom = ds.density.fulldepth.temps(1:6, timerange) - ...
     nanmean(nanmean(ds.density.fulldepth.temps(1:5, timerange))); %XXX Consider this further
 tempsbyhr = bindatabyhour(tempanom', ds.descriptors.datesen(timerange));
+stempbyhr = bindatabyhour(ds.density.fulldepth.temps(1,timerange)'-nanmean(ds.density.fulldepth.temps(1,timerange))...
+    , ds.descriptors.datesen(timerange));
 
 mldbyhr = bindatabyhour(mld(timerange), ds.descriptors.datesen(timerange));
 
@@ -21,6 +25,13 @@ wybyhr = bindatabyhour(wy(timerange), ds.descriptors.datesen(timerange));
 
 fluxbyhr = bindatabyhour(flux(timerange), ds.descriptors.datesen(timerange));
 
+[avbyhr avbin] = bindatabyhour(log(av(timerange)), ds.descriptors.datesen(timerange));
+avbyhr = exp(avbyhr);
+avbin = exp(avbin);
+[~, nbin, ~] = size(avbin);
+avmed = nanmedian(avbin,2);
+
+% riatmldh = bindatabyhour(riatmld, ds.descriptors.datesen(timerange));
 
 %============================== Plot Vars =================================
 plottobin = 29;                                         % Defines how deep
@@ -38,17 +49,33 @@ end
 
 
 
-gap = [.01 .1];
+gap = [.02 .1];
 margh = .1;
-margw = .125;
+margw = .225;
 %============================== Plotting ==================================
 
 figSh = figure;
 set(figSh,'units', 'pixels', 'Position', [0 0 782 674])
 
 %Flux Plot
-subtightplot(5,1,1,gap, margh, margw);
+subtightplot(13,1,1:2,gap, margh, margw);
+lvar = shifttolocal(fluxbyhr, timezone);
+% [AX h1 h2] = plotyy(0:23, shifttolocal(fluxbyhr, timezone),0:23, shifttolocal(stempbyhr, timezone));
 plot(0:23, shifttolocal(fluxbyhr, timezone), 'k', 'LineWidth', 2);
+mask = lvar>=0;
+times = 0:23;
+lvart = lvar;
+lvart(mask) = 0;
+% h = area(times, lvart, 'FaceColor', 'r');
+
+% set(h1, 'color','k', 'LineWidth', 2);
+% set(h2, 'color', 'k', 'LineWidth', 2);
+hold on
+lvart = lvar;
+lvart(~mask) = 0;
+% area(times, lvart, 'FaceColor', 'b');
+xt = get(gca, 'xtick');
+plot(xt, 0*xt, 'k', 'LineWidth', 1.5);
 grid on;
 xlim([0 23]);
 cb = colorbar;
@@ -57,11 +84,22 @@ title('Mean Diurnal Composite', 'FontSize', 16);
 set(gca, 'FontSize', 16);
 % axis square
 set(gca, 'XTick',0:23,'XTickLabel', []);
-ylabel('W m^{-2}', 'FontSize', 16);
-ylim([-250 750]);
+ylabel({'Heat Flux','W m^{-2}'}, 'FontSize', 16);
+ylim([-200 800]);
+
+% SST Amp
+subtightplot(13, 1, 3, gap, margh, margw)
+plot(0:23, shifttolocal(stempbyhr, timezone), 'k', 'LineWidth', 2);
+cb = colorbar;
+set(cb, 'visible', 'off')
+set(gca, 'FontSize', 16, 'XTick', 0:23, 'xlim', [0 23], 'XTickLabel', [],...
+    'ylim', [-.5 .5], 'ytick', .5:.);
+ylabel({'SSTA','\circC'}, 'FontSize', 16);
+
+grid on
 
 % Shear Plot
-subtightplot(5, 1, 2:5, gap, margh, margw);
+subtightplot(13, 1, 4:11, gap, margh, margw);
 [~, children] = contourf(0:23, ds.density.fulldepth.tempdepth(1:6), shifttolocal(tempsbyhr(:,:),timezone)', tempbins);
 caxis([tempbins(1) tempbins(end)]);
 set(children,'edgecolor','none');
@@ -108,20 +146,34 @@ colormap(flipud(othercolor('RdBu5')));
 set(gca, 'ydir', 'reverse')
 set(gca, 'XTick', [0:1:23]);
 
-set(gca, 'XTickLabel',xlabs);
+set(gca, 'XTickLabel',[]);
 set(gca, 'FontSize', 16);
 
 
 % axis equal
 axis square
 grid on;
-xlabel('Local Hour');
-ylabel('Depth (m)');
+ylabel({'Wind Stress, Current Shear','Depth (m)'});
 hold off
 
 
-set(gca, 'XTickLabel',xlabs);
+set(gca, 'XTickLabel',[]);
 
+%AV Plot
+subtightplot(13,1,12:13,gap, margh, margw);
+plot(0:23, shifttolocal(avbyhr, timezone), 'k', 'LineWidth', 2);
+grid on;
+xlim([0 23]);
+cb = colorbar;
+set(cb, 'visible', 'off')
+% title('Mean Diurnal Composite', 'FontSize', 16);
+set(gca, 'FontSize', 16);
+% axis square
+set(gca, 'XTick',0:23,'XTickLabel', xlabs, 'yscale', 'log');
+ylabel({'A_v','m^{-2}s^{-1}'}, 'FontSize', 16);
+ylim([5e-4 1e-2]);
+xlabel('Local Hour');
+set(gca, 'FontSize', 16);
 set(gcf, 'Position', [0 0 705 747]);
 set(gcf, 'Color', 'w');
 end

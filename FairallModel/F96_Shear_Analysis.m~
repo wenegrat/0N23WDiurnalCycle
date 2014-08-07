@@ -1,0 +1,116 @@
+%%
+% Analyze F96 output as a composite
+clear shmvar tvar
+
+trange = calm;
+
+ris = 0.25:.1:0.65;
+cmaps = linspecer(length(ris));
+
+
+    [Dt U T] = F963(met, mld,dataset.descriptors.datesen, 19, 0.25);
+
+    mask = (Dt(trange)' > 8);
+%     mask = isfinite(Dt(trange)');
+    
+ts = dataset.descriptors.datesen(trange);
+[shbar shdt] = valAtMLD(dataset.deepadcp.sh2forward.^(1/2), Dt/2, dataset.deepadcp.riforwarddepths);
+shbarv = shbar(trange);
+[shbm shbmbins] = bindatabyhour((shbarv), ts);
+shbm = nanmedian(shbm, 2);
+
+shvar = shmag(trange);
+[shm shmbins] = bindatabyhour((shvar(mask)), ts(mask));
+
+shm = nanmedian(shmbins, 2);
+[~ ,tmin] = minDaily(dataset.density.fulldepth.temps(1,:)', dataset.descriptors.datesen);
+ttemp = dataset.density.fulldepth.temps(1,:)' - tmin;
+[t tbins] = bindatabyhour(ttemp(trange), ts(:));
+tmin = min(t);
+t = t - tmin;
+for i=1:24
+    mask = isfinite(shmbins(i,:)) & (shmbins(i,:)~=0);
+    if (sum(mask) > 2)
+    temp = bootstrp(100, @median, shmbins(i,mask));
+    temp = sort(temp, 'ascend');
+    shmvar(i,1) = shm(i) - temp(5);
+    shmvar(i,2) = temp(95) - shm(i);
+    else
+        shmvar(i,:) = NaN(2,1);
+    end
+    
+    mask = isfinite(tbins(i,:));
+    if (sum(mask) > 2)
+    temp = bootstrp(100, @mean, tbins(i,mask));
+    temp = sort(temp, 'ascend');
+    tvar(i,1) = t(i) - temp(5);
+    tvar(i,2) = temp(95) - t(i);
+    else
+        tvar(i,:) = NaN(2,1);
+    end
+end
+
+
+
+
+
+figure
+h1 = subplot(1,2,1);
+% plot(0:23, (shm), 'k', 'LineWidth',2);
+errorbar(0:23, shm, shmvar(:,1), shmvar(:,2), 'k', 'LineWidth', 2);
+hold on
+plot(0:23, (shbm), '--k', 'LineWidth',2);
+hold off
+
+grid on
+set(gca, 'FontSize', 16);
+xlim([6 23]);
+title('Shear', 'FontSize', 16);
+ylabel('s^{-1}', 'FontSize', 16);
+xlabel('Hour', 'FontSize', 16);
+
+h2 = subplot(1,2,2);
+% plot(0:23, t, 'k', 'LineWidth', 2);
+errorbar(0:23, t, tvar(:,1), tvar(:,2), 'k', 'LineWidth', 2);
+
+grid on
+set(gca, 'FontSize', 16);
+ylim([0 .65]);
+xlim([6 23]);
+title('1 m Temp', 'FontSize', 16);
+ylabel('^{\circ}C', 'FontSize', 16);
+xlabel('Hour', 'FontSize', 16);
+
+for i=1:length(ris)
+    
+    [Dt U T] = F963(met, mld,dataset.descriptors.datesen, 19, ris(i));
+
+    mask = (Dt(trange)' > 8);
+
+    msh = (U(trange)./Dt(trange))';
+    
+    T = (T(trange) - T(trange)./Dt(trange)'); %normalize to 1m
+    
+    [mshm mshbins] = bindatabyhour(msh, ts);
+    mshm = nanmedian(mshm,2);
+    [tm ~] = bindatabyhour(T, ts);
+    tm = nanmedian(tm,2);
+    [dttemp, ~] = bindatabyhour(Dt(trange)', ts);
+    dtar(i,:) = dttemp;
+    
+    axes(h1);
+    hold on
+    plot(0:23, mshm, 'color', cmaps(i,:));
+    hold off
+    
+    axes(h2)
+    hold on
+    plot(0:23, tm, 'color', cmaps(i,:));
+    hold off
+end
+legend('Obs', ['Ri = ', num2str(ris(1))], ['Ri = ', num2str(ris(2))], ['Ri = ', num2str(ris(3))], ['Ri = ', num2str(ris(4))], ['Ri = ', num2str(ris(5))], 'Location', 'NorthEast');
+
+
+set(gcf, 'Color', 'w');
+
+

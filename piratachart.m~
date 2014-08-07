@@ -1,0 +1,56 @@
+%%
+%==================LOCATION CHART =====================================
+figure
+lats = [-19 -14 -10 -8 -6 -5 -2 0 2 4 8 12 15 20 21];
+lons = [322 325 326 328 330 337 350 0 8];
+lt = lons-360;
+lt(end) = 8;
+locs = [lt(1) lats(end-1); lt(1) lats(end-2); lt(1) lats(end-3); lt(1) lats(end-4); lt(1) lats(end-5);...
+    lt(2) 0; ...
+    lt(3) -19; ...
+    lt(4) -14; ...
+    lt(5) -8; ...
+    lt(6) 0; lt(6) 4; lt(6) 12; lt(6) 21; ...
+    lt(7) -10; lt(7) -6; lt(7) -2; lt(7) 0; lt(7) 2; ...
+    0 0; ...
+    lt(9) -6];
+
+m_proj('Mercator', 'longitudes', [-45 15], 'latitudes', [-20 20]);
+    m_coast('patch', [.7 .7 .7]);
+    m_grid;
+    hold on
+    
+m_plot(locs(:,1), locs(:,2), 'kd', 'MarkerSize', 10, 'MarkerFaceColor','k');
+hold off
+
+%     
+%         
+%         
+% ds.desc.locs = [ 0 78; 0 83; 0 80.5; .75 80.5; -.75 80.5; 1.5 80.5; -1.5 80.5;...
+%     2.5 80.5; -2.5 80.5; -4 80.5];
+% locs = [-8 55; -12 55; -16 55; -1.5 67; -4 67; -8 67; -12 67; 1.5 80.5; 0 80.5; -1.5 80.5; -4 80.5; -8 80.5; -12 80.5; -16 80.5;...
+%     15 90; 12 90; 8 90; 4 90; 1.5 90; 0 90; -1.5 90; -12 93; -5 95; -8 95; -8 100];% -25 100;];
+% 
+% close all
+% f1 = figure;
+% % m_proj('mercator', 'latitudes', [-8 16], 'longitudes', [70 90]);
+% m_proj('mercator', 'latitudes', [-18 18], 'longitudes', [40 110]);
+% 
+% m_coast('patch', [.7 .7 .7]);
+% m_tbase('contour', [-5000:1000:-1000], 'edgecolor', 'k');
+% m_grid('xtick', 15, 'ytick', 9);
+% % m_elev('contour', [-5000:1000:-1000], 'edgecolor', 'k');
+% hold on
+% % h2 = m_plot(80.5*ones([1 4]), [-4 -1.5 0 1.5], 'rd', 'MarkerSize', 15, 'MarkerFaceColor', 'r');
+% h2 = m_plot(locs(:,2), locs(:,1), 'ko', 'MarkerSize', 15, 'MarkerFaceColor', 'k');
+% 
+% h1 = m_plot(ds.desc.locs(:,2), ds.desc.locs(:,1), 'bd', 'MarkerSize', 10, 'MarkerFaceColor', 'b');
+% h1 = m_plot(90, 0, 'bd', 'MarkerSize', 10, 'MarkerFaceColor', 'b');
+% 
+% % h2 = m_plot(80.5*ones([1 4]), [-4 -1.5 0 1.5], 'rd', 'MarkerSize', 15, 'MarkerFaceColor', 'r');
+% 
+% hold off
+% set(gca, 'FontSize', 16);
+% 
+% m_legend([h1 h2], 'ADCP', 'RAMA');
+set(gcf, 'Color', 'w');

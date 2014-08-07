@@ -1,0 +1,255 @@
+function makeDCPlotLongEq(ds35, ds23, ds10, ds0, tri, AMM, SOI)
+
+dc35 = complex_demodulate_tri(ds35.sst, 1./(24*6), tri);
+dc23 = complex_demodulate_tri(ds23.sst, 1./(24*6), tri);
+dc10 = complex_demodulate_tri(ds10.sst, 1./(24*6), tri);
+dc0 = complex_demodulate_tri(ds0.sst, 1./(24*6), tri);
+
+
+[sst35 mtimes35] = averageSSTMonthly(dc35.semimaj, ds35.dates);
+[sst23 mtimes23] = averageSSTMonthly(dc23.semimaj, ds23.dates);
+[sst10 mtimes10] = averageSSTMonthly(dc10.semimaj, ds10.dates);
+[sst0 mtimes0] = averageSSTMonthly(dc0.semimaj, ds0.dates);
+
+
+% sstanom = interannualAnom(sst, mtimes);
+% sstanoms = conv(sstanom, [1 1 1]./3, 'same');
+% clim = averageMonthly(dc.semimaj, times);
+% climr = repmat(clim, 16, 1);
+
+clim35 = averageMonthly(sst35, mtimes35);
+clim35w = averageMonthly(ds35.wind, ds35.winddates);
+
+clim23 = averageMonthly(sst23, mtimes23);
+clim23w = averageMonthly(ds23.wind, ds23.winddates);
+
+clim10 = averageMonthly(sst10, mtimes10);
+clim10w = averageMonthly(ds10.wind, ds10.winddates);
+
+clim0 = averageMonthly(sst0, mtimes0);
+clim0w = averageMonthly(ds0.wind, ds0.winddates);
+
+% figure
+% plot(1:12, clim35, 'k', 'LineWidth', 2);
+% 
+% % plot(times, dc.semimaj, 'k', 'LineWidth', 2);
+% % set(gca, 'xtick', datenum(1998:1:2014,1, 1));
+% % datetick('x', 'yyyy', 'keepticks');
+% yt = get(gca, 'ytick');
+% hold on
+% % plot(datenum(2008, 10, 13).*ones(size(yt)), yt, 'k');
+% % plot(datenum(2009, 5, 18).*ones(size(yt)), yt, 'k');
+% plot(1:12, clim23, '--k', 'LineWidth', 2);
+% plot(1:12, clim10, '-b', 'LineWidth', 1.5);
+% plot(1:12, clim0, '--b', 'LineWidth', 1.5);
+% 
+% 
+% hold off
+% ylim([0 .4]);
+% grid on
+% 
+% ylabel('(\circ C)', 'FontSize', 16);
+% title('SST Diurnal Cycle Amplitude Clim.', 'FontSize', 16);
+% 
+% set(gca, 'FontSize', 16, 'xtickLabel', []);
+
+
+figure
+gap = [.03 .105]; margh = .1; margw = .1;
+% plot(times, dc.semimaj, '--k', 'LineWidth', 1.0);
+subtightplot(4,6,1:4, gap, margh, margw)
+
+[AX h1 h2] = plotyy(mtimes35, sst35, ds35.winddates, ds35.wind);
+
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(AX(1), 'xtick', datenum(1998:1:2014,1, 1));
+set(AX(2), 'xtick', datenum(1998:1:2014,1, 1), 'FontSize', 16);
+datetick(AX(1),'x', 'yyyy', 'keepticks');
+datetick(AX(2),'x', 'yyyy', 'keepticks');
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+
+yt = get(gca, 'ytick');
+hold on
+% plot(datenum(2008, 10, 13).*ones(size(yt)), yt, 'k');
+% plot(datenum(2009, 5, 18).*ones(size(yt)), yt, 'k');
+% plot(mtimes23, sst23, '--k', 'LineWidth', 2);
+% plot(mtimes10, sst10, '-b', 'LineWidth', 1.5);
+% plot(mtimes0, sst0, '--b', 'LineWidth', 1.5);
+% 
+% plot(ds35.winddates, ds35.wind./20, '--k', 'LineWidth', 2);
+
+hold off
+% ylim([0 .4]);
+xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
+grid on
+
+ylabel('\circ C', 'FontSize', 16);
+% title('SST Diurnal Cycle Amplitude', 'FontSize', 16);
+
+set(gca, 'FontSize', 16);
+
+subtightplot(4,6,5:6, gap, margh, margw)
+[AX h1 h2] = plotyy(datenum(1998,1:12, 1), clim35, datenum(1998,1:12, 1), clim35w);
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX, {'xtick'}, {datenum(1998,1:12, 1); datenum(1998,1:12, 1)}, {'xlim'},...
+    {[datenum(1998,1,1) datenum(1998, 12, 1)]; [datenum(1998,1,1) datenum(1998, 12, 1)]} );
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(get(AX(1), 'ylabel'), 'string', '\circ C', 'FontSize', 16)
+set(AX(2), 'ylim', [0 10], 'FontSize', 16);
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+grid on
+% =====================================
+subtightplot(4,6,7:10, gap, margh, margw)
+
+plot(mtimes23, sst23, 'k', 'LineWidth', 2);
+[AX h1 h2] = plotyy(mtimes23, sst23, ds23.winddates, ds23.wind);
+
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(AX(1), 'xtick', datenum(1998:1:2014,1, 1));
+set(AX(2), 'xtick', datenum(1998:1:2014,1, 1), 'FontSize', 16);
+datetick(AX(1),'x', 'yyyy', 'keepticks');
+datetick(AX(2),'x', 'yyyy', 'keepticks');
+set(AX, {'ycolor'}, {'k';'k'});
+% plot(times, dc.semimaj, 'k', 'LineWidth', 2);
+set(gca, 'xtick', datenum(1998:1:2014,1, 1));
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+
+yt = get(gca, 'ytick');
+hold on
+plot(datenum(2008, 10, 13).*ones(size(yt)), yt, 'k');
+plot(datenum(2009, 5, 18).*ones(size(yt)), yt, 'k');
+hold off
+ylim([0 .4]);
+xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
+grid on
+
+ylabel('\circ C', 'FontSize', 16);
+
+set(gca, 'FontSize', 16, 'xtickLabel', []);
+
+
+subtightplot(4,6,11:12, gap, margh, margw)
+[AX h1 h2] = plotyy(datenum(1998,1:12, 1), clim23, datenum(1998,1:12, 1), clim23w);
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX, {'xtick'}, {datenum(1998,1:12, 1); datenum(1998,1:12, 1)}, {'xlim'},...
+    {[datenum(1998,1,1) datenum(1998, 12, 1)]; [datenum(1998,1,1) datenum(1998, 12, 1)]} );
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(get(AX(1), 'ylabel'), 'string', '\circ C', 'FontSize', 16)
+set(AX(2), 'ylim', [0 10], 'ytick', 0:5:10, 'FontSize', 16);
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+grid on
+% =======================================
+subtightplot(4,6,13:16, gap, margh, margw)
+
+[AX h1 h2] = plotyy(mtimes10, sst10, ds10.winddates, ds10.wind);
+
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(AX(1), 'xtick', datenum(1998:1:2014,1, 1));
+set(AX(2), 'xtick', datenum(1998:1:2014,1, 1), 'FontSize', 16);
+datetick(AX(1),'x', 'yyyy', 'keepticks');
+datetick(AX(2),'x', 'yyyy', 'keepticks');
+set(AX, {'ycolor'}, {'k';'k'});
+% plot(times, dc.semimaj, 'k', 'LineWidth', 2);
+set(gca, 'xtick', datenum(1998:1:2014,1, 1));
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+
+yt = get(gca, 'ytick');
+hold on
+
+hold off
+ylim([0 .4]);
+xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
+grid on
+
+ylabel('\circ C', 'FontSize', 16);
+
+set(gca, 'FontSize', 16, 'xtickLabel', []);
+
+subtightplot(4,6,17:18, gap, margh, margw)
+[AX h1 h2] = plotyy(datenum(1998,1:12, 1), clim10, datenum(1998,1:12, 1), clim10w);
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX, {'xtick'}, {datenum(1998,1:12, 1); datenum(1998,1:12, 1)}, {'xlim'},...
+    {[datenum(1998,1,1) datenum(1998, 12, 1)]; [datenum(1998,1,1) datenum(1998, 12, 1)]} );
+set(AX, {'ycolor'}, {'k';'k'}, {'xTickLabel'}, {[];[]});
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(get(AX(1), 'ylabel'), 'string', '\circ C', 'FontSize', 16)
+set(AX(2), 'ylim', [0 10], 'ytick', 0:5:10, 'FontSize', 16);
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+grid on
+
+% ===============================================
+subtightplot(4,6, 19:22, gap, margh, margw)
+
+[AX h1 h2] = plotyy(mtimes0, sst0, ds0.winddates, ds0.wind);
+
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(AX(1), 'xtick', datenum(1998:1:2014,1, 1));
+set(AX(2), 'xtick', datenum(1998:1:2014,1, 1), 'FontSize', 16);
+datetick(AX(1),'x', 'yyyy', 'keepticks');
+datetick(AX(2),'x', 'yyyy', 'keepticks');
+set(AX, {'ycolor'}, {'k';'k'});
+% plot(times, dc.semimaj, 'k', 'LineWidth', 2);
+set(gca, 'xtick', datenum(1998:1:2014,1, 1));
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+
+yt = get(gca, 'ytick');
+hold on
+
+hold off
+ylim([0 .4]);
+xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
+grid on
+
+ylabel('\circ C', 'FontSize', 16);
+xlabel('Year', 'FontSize', 16);
+
+set(gca, 'FontSize', 16);
+
+subtightplot(4,6,23:24, gap, margh, margw)
+[AX h1 h2] = plotyy(datenum(1998,1:12, 1), clim0, datenum(1998,1:12, 1), clim0w);
+set(h1,'color', 'k', 'LineWidth', 2);
+set(h2, 'color', 'k', 'LineStyle', '--', 'LineWidth', 1.5);
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(AX, {'ycolor'}, {'k';'k'});
+set(AX, {'xtick'}, {datenum(1998,1:12, 1); datenum(1998,1:12, 1)});
+datetick(AX(1),'x', 'm', 'keepticks');
+datetick(AX(2),'x', 'm', 'keepticks');
+set(get(AX(2), 'ylabel'), 'string', 'm s^-1', 'FontSize', 16)
+set(get(AX(1), 'ylabel'), 'string', '\circ C', 'FontSize', 16)
+set(AX(2), 'ylim', [0 10], 'ytick', 0:5:10, 'FontSize', 16);
+set(AX(1), 'ylim', [0 .4], 'ytick', 0:.1:.4, 'FontSize', 16);
+set(get(AX(1), 'xlabel'), 'string', 'Month', 'FontSize', 16);
+grid on
+
+set(gca, 'FontSize', 16);
+set(gcf, 'Color', 'w');
+set(gcf, 'Position', [0 0 1401  683]);
+
+legend('Diurnal SST Amp', 'Wind Speed', 'location', 'SouthOutside');
+% text(0,0,'35W', 'FontSize', 16);
+% text(0,0, '23W', 'FontSize', 16);
+% text(0,0, '10W', 'FontSize', 16);
+% text(0,0, '0E', 'FontSize', 16);
+
+end
