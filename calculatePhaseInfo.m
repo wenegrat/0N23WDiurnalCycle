@@ -16,7 +16,19 @@ edges = 0:diff:24;
 Nt = histc(pt, edges);
 Nc = histc(pc, edges);
 
+figure
+subplot(1,2,1)
 plot(edges + diff/2, Nt./sum(Nt));
 hold on;
 plot(edges + diff/2 , Nc./sum(Nc), 'k');
 hold off;
+title('Phase Histogram');
+legend('Trades', 'Calm');
+xlabel('UTC Hr');
+
+subplot(1,2,2)
+cdfplot(pt);
+hold on
+H = cdfplot(pc);
+set(H, 'Color', 'k');
+hold off

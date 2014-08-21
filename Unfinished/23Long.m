@@ -36,7 +36,7 @@ data = ncdfread('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeri
     
  tempdens = squeeze(data.T_20);
  tempdens(tempdens>1e4) = NaN;
- tempmld = calculateMLD(tempdens, data.depth, .5);
+ tempmld = calculateMLD(tempdens, data.depth, .5); %.046 is equiv to Delta_rho = .015 kg m^-3
  mask1 = isfinite(tempdens);
  mask = (sum(mask1(1:10, :)) > 4) & mask1(1,:);
  tempmld(~mask) = NaN;

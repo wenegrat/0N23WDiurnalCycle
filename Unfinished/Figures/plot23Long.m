@@ -3,7 +3,7 @@ function plot23Long(data23)
 
 pcolor = 'k';
 
-gap = [.03 .105]; margh = .1; margw = .1;
+gap = [.035 .105]; margh = .1; margw = .125;
 
 figure
 
@@ -26,7 +26,7 @@ xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
 set(gca, 'FontSize', 16, 'xtickLabel', []);
 set(gca, 'GridLineStyle', '--')
 title('23\circW', 'FontSize', 16);
-axes_label('a)', 50, 5);
+axes_label('a)', 200, 50);
 
 % Wind
 subtightplot(5,1,2, gap, margh, margw)
@@ -42,12 +42,12 @@ ylabel({'Wind', '(m s^{-1})'}, 'FontSize', 16);
 set(gca, 'FontSize', 16, 'xtickLabel', []);
 xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
 set(gca, 'GridLineStyle', '--')
-axes_label('b)', 50, 5);
+axes_label('b)', 200, 50);
 
 % delta SST
 subtightplot(5,1,3, gap, margh, margw)
 plot(data23.tempdiffdates, data23.tempdiff, pcolor, 'LineWidth', 2);
-set(gca, 'xtick', datenum(1998:1:2014,1, 1), 'ylim', [0 .3], 'ytick', 0:.075:.3);
+set(gca, 'xtick', datenum(1998:1:2014,1, 1), 'ylim', [0 .25], 'ytick', 0:.0625:.3);
 yt = get(gca, 'ytick');
 hold on
 plot(datenum(2008, 10, 13).*ones(size(yt)), yt, 'k');
@@ -58,7 +58,7 @@ ylabel({'\DeltaT', '(\circC)'}, 'FontSize', 16);
 set(gca, 'FontSize', 16, 'xtickLabel', []);
 xlim([datenum(1998, 1, 1) datenum(2014,1,1)]);
 set(gca, 'GridLineStyle', '--')
-axes_label('c)', 50, 5);
+axes_label('c)', 200, 50);
 
 % MLD & Z20
 
@@ -80,7 +80,7 @@ grid on
 set(gca, 'GridLineStyle', '--')
 
 set(gca, 'FontSize', 16, 'xtickLabel', []);
-axes_label('d)', 10, 50);
+axes_label('d)', 200, 50);
 
 % Heat
 subtightplot(5,1,5, gap, margh, margw)
@@ -100,7 +100,7 @@ datetick('x', 'yyyy', 'keeplimits', 'keepticks');
 set(gca, 'GridLineStyle', '--')
 
 set(gca, 'FontSize', 16);
-axes_label('e)', 50, 5);
+axes_label('e)', 200, 50);
 
 set(gcf, 'Color', 'w', 'Position', [0 0 1117 842]);
 end

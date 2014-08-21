@@ -28,7 +28,7 @@ dateranged = 1:249;
 daterange = 1:5967;
 
 figure
-h=tight_subplot(9,1, .01, .05, [.1 .05]);
+h=tight_subplot(9,1, .012, .05, [.1 .05]);
 
 %===============
 axes(h(1))
@@ -40,7 +40,7 @@ cb = colorbar;
 set(cb, 'visible', 'off');
 xlim([dataset.descriptors.datesen(daterange(1))-xaxisoffset dataset.descriptors.datesen(daterange(end))+xaxisoffset]);
 datetick('x', 'keeplimits', 'keepticks')
-set(gca, 'ytick', 0:.1:.4, 'ylim', [0 .4]);
+set(gca, 'ytick', 0:.1:.5, 'ylim', [0 .5]);
 set(gca,'XTickLabel',[])
 
 hold on
@@ -50,7 +50,7 @@ plot(dataset.descriptors.datesen(calm(end)).*ones(size(yt)), yt, 'k', 'LineWidth
 grid on
 hold off
 ylabel({'SST Amp', '\circC'}, 'FontSize', 12);
-axes_label('a)', 50, 5);
+axes_label('a)', 50, 50);
 
 %==============
 % h(1) = subplot(5,1,1);
@@ -63,7 +63,7 @@ hold on
 var = smooth(averageDaily(swnet, 1, dataset.descriptors.datesen), 5);
 plot(dataset.descriptors.datesend(5:end-5), var(5:end-5), '--k', 'LineWidth', 1.5);
 var = smooth(averageDaily(-lwnet, 1, dataset.descriptors.datesen), 5);
-plot(dataset.descriptors.datesend(5:end-5),  var(5:end-5) , '--k', 'LineWidth', 1.5);
+plot(dataset.descriptors.datesend(5:end-5),  var(5:end-5) , '-.k', 'LineWidth', 1.5);
 var = smooth(averageDaily(-sensnet, 1, dataset.descriptors.datesen), 5);
 plot(dataset.descriptors.datesend(5:end-5),  var(5:end-5) , '-b', 'LineWidth', 1.5);
 var = smooth(averageDaily(-latnet, 1, dataset.descriptors.datesen), 5);
@@ -102,7 +102,7 @@ plot(dataset.descriptors.datesen(calm(end)).*ones(size(yt)), yt, 'k', 'LineWidth
 hold off
 % axis equal
 xlim([dataset.descriptors.datesen(daterange(1))-xaxisoffset dataset.descriptors.datesen(daterange(end))+xaxisoffset]);
-ylabel({'E-P', 'cm'});
+ylabel({'E-P', 'cm day^{-1}'});
 ylim([-10 1]);
 axes_label('c)', 50, 5);
 grid on
@@ -248,7 +248,7 @@ ylim([0 max(dataset.deepadcp.fulldepths(1:plottobin))+yaxisoffset]);
 cb = colorbar;
 
 ylabel({'Log_{10}(Sh^2)', 'Depth (m)'},'FontSize', 12);
-set(get(cb, 'YLabel'), 'String', 'Log_{10}(s^{-2})');
+set(get(cb, 'YLabel'), 'String', 'log_{10}(s^{-2})');
 
 hold on
 plot(dataset.descriptors.datesend(:), averagedaily(dataset.density.fulldepth.mldT, 1,dataset.descriptors.datesen), '-w', 'LineWidth', 2);

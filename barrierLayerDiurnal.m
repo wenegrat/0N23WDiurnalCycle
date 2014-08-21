@@ -91,3 +91,25 @@ ylabel({'E-P', 'cm'});
 ylim([-10 1]);
 axes_label('c)', 50, 5);
 grid on
+
+
+axes(h(4))
+% [mthheat, mtimes] = averageSSTMonthly(dataset.flux.netheat, dataset.descriptors.datesen);
+bar(dataset.descriptors.datesen, dataset.density.fulldepth.temps(1,:)'-dataset.density.fulldepth.temps(2,:)', 'b');
+cb = colorbar;
+set(cb, 'visible', 'off');
+set(gca, 'XTick', dticks);
+datetick('x',3,'keepticks');
+set(gca,'XTickLabel',[])
+
+hold on
+yt = get(gca, 'ytick');
+plot(dataset.descriptors.datesen(trades(end)).*ones(size(yt)), yt, 'k', 'LineWidth', 1.5);
+plot(dataset.descriptors.datesen(calm(end)).*ones(size(yt)), yt, 'k', 'LineWidth', 1.5);
+hold off
+% axis equal
+xlim([dataset.descriptors.datesen(daterange(1))-xaxisoffset dataset.descriptors.datesen(daterange(end))+xaxisoffset]);
+ylabel({'E-P', 'cm'});
+% ylim([-10 1]);
+axes_label('c)', 50, 5);
+grid on

@@ -29,6 +29,34 @@ avcut = bootstrappercentile(avmag, .01, 1000);
 av = avmag;
 av(av>avcut) = NaN;
 
+disp(['Trades dates: ', datestr(dataset.descriptors.datesen(trades(1))),'  -  ', datestr(dataset.descriptors.datesen(trades(end)))]);
+disp(['Variable dates: ', datestr(dataset.descriptors.datesen(calm(1))),'  -  ', datestr(dataset.descriptors.datesen(calm(end)))]);
+disp(['TIW Cold dates: ', datestr(dataset.descriptors.datesen(tiwcold(1))),'  -  ', datestr(dataset.descriptors.datesen(tiwcold(end)))]);
+disp(['TIW Warm dates: ', datestr(dataset.descriptors.datesen(tiwwarm(1))),'  -  ', datestr(dataset.descriptors.datesen(tiwwarm(end)))]);
+
+tri=triang(48-1)./24; %Following Kessler PDF
+cmodDC = complex_demodulate_tri(sst, 1/24, tri);
+
+disp(['Average SSTA Trades: ', num2str(nanmean(cmodDC.semimaj(trades)))]);
+disp(['Average SSTA Variable: ', num2str(nanmean(cmodDC.semimaj(calm)))]);
+
+disp(['Average Wind Speed Trades: ', num2str(nanmean(dataset.measures.wspdh(trades)))]);
+disp(['Average Wind Speed Variable: ', num2str(nanmean(dataset.measures.wspdh(calm)))]);
+
+%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Background Work
+% Stuff that is not included in figures.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%==========================================================================
+% Phase Info
+% Look at the histograms/distributions of phase info for peak SST signal.
+%==========================================================================
+calculatePhaseInfo;
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Section: Introduction/Methods
 % 
@@ -68,8 +96,7 @@ plot23ClimSWR(data23)
 % 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 loadBuoyancyFlux;
-tri=triang(48-1)./24; %Following Kessler PDF
-cmodDC = complex_demodulate_tri(sst, 1/24, tri);
+
 
 %==========================================================================
 % Figure 4
@@ -152,10 +179,13 @@ trange = tiwcold;
 GradRI2_Stats;
 set(gca, 'XTickLabel','');
 set(get(gca, 'Xlabel'), 'String', '');
+set(cb, 'YTick', [0:.1:limits(end)])
+axes_label('a)', 10, 60);
 subtightplot(2,1,2, gap, margh, margw)
 trange = tiwwarm;
 GradRI2_Stats;
 set(get(gca, 'Title'),'String', '');
+axes_label('b)', 10, 60);
 set(gcf, 'Position', [0 0 665 740]);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -168,7 +198,7 @@ set(gcf, 'Position', [0 0 665 740]);
 % Figure 12
 % MI Plot
 %==========================================================================
-plotMI;
+plotMIwithRI;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -185,4 +215,56 @@ plotMI;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Saving Figures
+%
+% Instructions for manual changes to figures prior to saving.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Fig 2
+%%%%%%%%
+% Adjust labels (use align grid)
+
+%Fig 4
+%%%%%%%%
+% Lots of adjusting, can try loading .fig file
+% Resize to:
+% set(gcf, 'Position', [-185 2000 1209 1028]);
+% Adjust all labels throughout
+%
+
+
+%Fig 5
+%%%%%%%%
+% Move to big screen, adjust size
+% set(gcf, 'Position', [-185 2000 1270 717]);
+% Move labels
+
+%Fig 6
+%%%%%%%%
+% Move to big screen, adjust size
+% set(gcf, 'Position', [-185 2000 1174 1128]);
+% Adjust vector legend text location
+
+%Fig 8
+%%%%%%%%
+% Move to big screen, adjust size
+% set(gcf, 'Position', [-185 2000 1174 1128]);
+% Adjust vector legend text location
+
+%Fig 10
+%%%%%%%%
+% Move to big screen, adjust size 
+% set(gcf, 'Color', 'w', 'Position', [-185 2000 1340 1000]);
+% Move labels
+
+%Fig 11
+%%%%%%%%
+% Position (a) and (b) labels.
+
+%Fig 12
+%%%%%%%%
+% Enlarge height
+% Move 'Sh^2_red label up a bit.
+
+
 % End Manuscript

@@ -94,7 +94,7 @@ cb = colorbar;
 set(cb, 'visible', 'off')
 set(gca, 'FontSize', 16, 'XTick', 0:23, 'xlim', [0 23], 'XTickLabel', [],...
     'ylim', [-.35 .35], 'ytick', -.35:.1725:.35, 'yTickLabel', {'-.35', [], '0', [], '.35'});
-ylabel({'SSTA','\circC'}, 'FontSize', 16);
+ylabel({'dSST','\circC'}, 'FontSize', 16);
 
 grid on
 
@@ -124,7 +124,7 @@ wy =  -scalefactor*shifttolocal(wybyhr(:),timezone)';
 
 xleg = 2;
 yleg = 2;
-fudge = .5;
+fudge = .65;
 legq = quiver(xleg, yleg, (scalevel*200), 0, 'k', 'LineWidth', 1.2);
 text(xleg, yleg - fudge, 'Wind: 4 m/s', 'FontSize', 14)
 

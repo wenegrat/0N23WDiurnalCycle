@@ -36,7 +36,7 @@ data = ncdfread('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeri
     
  tempdens = squeeze(data.T_20);
  tempdens(tempdens>1e4) = NaN;
- tempmld = calculateMLD(tempdens, data.depth, .5);
+ tempmld = calculateMLD(tempdens, data.depth, .046);
  mask1 = isfinite(tempdens);
  mask = (sum(mask1(1:10, :)) > 4) & mask1(1,:);
  tempmld(~mask) = NaN;
@@ -90,46 +90,42 @@ data = ncdfread('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeri
  data23.olrdates = tempDates;
  clear data tempDates tempOLR 
  
- %%
- % Plots
- 
- plot23Long(data23);
- 
- %%
- %Climatology
- sstclim = averageMonthly(data23.sstDC, data23.sstDCdates);
- plot(datenum(0, 1:12,1), sstclim);
- set(gca, 'xtick', datenum(0, 1:12,1));
- datetick('x', 'm','keepticks', 'keeplimits');
- grid on
- 
- %%
- % Data From http://sunrise.aos.wisc.edu/~dvimont/MModes/Data/
- importAMMfile('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeries/ClimateIndices/AMM.txt'); %puts into var called 'data'
- tempDates = datenum(data(:,1), data(:,2), 1);
- data23.AMM_sst = data(:,3)./std(data(601:end,3)); % Check this...
- data23.AMM_dates = tempDates;
- data23.AMM_wind = data(:,4)./std(data(601:end,4));
- clear tempDates
- 
- % Data from http://www.cpc.ncep.noaa.gov/data/indices/
- 
- importSOIfile('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeries/ClimateIndices/soistd.txt'); %puts into var called 'data'
- for i=1:length(data)
-     tempDates(i,:) = datenum(data(i,1), 1:12, 1);
- end
- tempDates = reshape(tempDates', length(data).*12, 1);
- tempInd = reshape(data(:,2:end)', length(data).*12,1);
- tempInd(abs(tempInd)>10) = NaN;
- data23.SOI = tempInd;
- data23.SOIdates = tempDates;
-%  clear data tempDates tempInd
-
-%%
-% Data for ATL3 Index
-data = loadATL3();
-data23.atl3 = data.sstm;
-data23.atl3dates = data.sstdates;
-clear data
- %%
- plot23Inter(data23);
+%  %%
+%  % Plots
+%  
+%  plot23Long(data23);
+%  
+%  %%
+%  %Climatology
+% plot23Clim(data23);
+%  
+%  %%
+%  % Data From http://sunrise.aos.wisc.edu/~dvimont/MModes/Data/
+%  importAMMfile('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeries/ClimateIndices/AMM.txt'); %puts into var called 'data'
+%  tempDates = datenum(data(:,1), data(:,2), 1);
+%  data23.AMM_sst = data(:,3)./std(data(601:end,3)); % Check this...
+%  data23.AMM_dates = tempDates;
+%  data23.AMM_wind = data(:,4)./std(data(601:end,4));
+%  clear tempDates
+%  
+%  % Data from http://www.cpc.ncep.noaa.gov/data/indices/
+%  
+%  importSOIfile('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeries/ClimateIndices/soistd.txt'); %puts into var called 'data'
+%  for i=1:length(data)
+%      tempDates(i,:) = datenum(data(i,1), 1:12, 1);
+%  end
+%  tempDates = reshape(tempDates', length(data).*12, 1);
+%  tempInd = reshape(data(:,2:end)', length(data).*12,1);
+%  tempInd(abs(tempInd)>10) = NaN;
+%  data23.SOI = tempInd;
+%  data23.SOIdates = tempDates;
+% %  clear data tempDates tempInd
+% 
+% %%
+% % Data for ATL3 Index
+% data = loadATL3();
+% data23.atl3 = data.sstm;
+% data23.atl3dates = data.sstdates;
+% clear data
+%  %%
+%  plot23Inter(data23);

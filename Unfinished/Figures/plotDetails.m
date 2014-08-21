@@ -11,7 +11,7 @@ function plotDetails(dataset, r)
     h = .5*ones(3); h(2,2) = 1; h = 1/5 * h; %Weight center position most
     h = .25*ones(3); h(2,2) = 1; h = 1/3 * h; %Weight center position most
 %     h = 1;
-    gap=[.03 .1]; margh=.1; margw  = .1;
+    gap=[.04 .1]; margh=.1; margw  = .1;
 
 %     subtightplot(4,1,1, gap, margh, margw)
 %     % plot(dataset.descriptors.datesen(r), nanmean(dataset.measures.Nmmpersecih(r,1:35), 2)/1000, 'k', 'LineWidth', 2);
@@ -64,7 +64,7 @@ figure
     hold off
     ylabel({'Neat Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
     title([datestr(dataset.descriptors.datesen(r(1)), 1), '   -   ', datestr(dataset.descriptors.datesen(r(end-13)), 1)], 'FontSize', 16);
-    
+    axes_label('a)', 200, 20);
     % ======== N^2
     subtightplot(7,1,2:3, gap, margh, margw)
     [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,   naninterpmatrix(double(log10(4*dataset.deepadcp.n2forward_sort(r,:)))'), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
@@ -93,6 +93,7 @@ figure
     ylabel('Depth (m)');
     ylim(ylimits);
     grid on
+    axes_label('b)', 200, 20);
     
     % ========== Sh^2
     subtightplot(7,1,4:5, gap, margh, margw)
@@ -119,7 +120,8 @@ figure
     ylabel('Depth (m)');
     ylim(ylimits);
     grid on
-
+    axes_label('c)', 200, 20);
+    
     % ============== RSh^2
     
     [xi yi] = meshgrid(interp1(1:length(r), dataset.descriptors.datesen(r), 1:.25:length(r)), 0:1:50);
@@ -166,10 +168,11 @@ figure
     set(get(gca, 'xlabel'), 'FontSize', 14);
 
     cb = colorbar;
-    set(get(cb, 'YLabel'), 'String', 'Sh_{Red}^2 (s^{-2})', 'FontSize', 16);
+    set(get(cb, 'YLabel'), 'String', 'Sh_{red}^2 (s^{-2})', 'FontSize', 16);
     ylabel('Depth (m)');
     ylim(ylimits);
     xlabel('Hour UTC');
+    axes_label('d)', 200, 20);
     % packrows(4,1);
 % colormap(cptcmap('Blre'))
 %     set(gcf, 'Color', 'w', 'units', 'normalized', 'Position', [.1 .1
