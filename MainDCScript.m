@@ -55,7 +55,7 @@ disp(['Average Wind Speed Variable: ', num2str(nanmean(dataset.measures.wspdh(ca
 % Look at the histograms/distributions of phase info for peak SST signal.
 %==========================================================================
 calculatePhaseInfo;
-
+shratiocompare;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Section: Introduction/Methods
@@ -67,7 +67,7 @@ calculatePhaseInfo;
 % Figure 1 
 % Map of PIRATA array and location of mooring
 %==========================================================================
-piratachart;
+piratachart_wSST;
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -256,6 +256,7 @@ plotMIwithRI;
 % Move to big screen, adjust size 
 % set(gcf, 'Color', 'w', 'Position', [-185 2000 1340 1000]);
 % Move labels
+% Shift X label to left.
 
 %Fig 11
 %%%%%%%%
@@ -263,7 +264,8 @@ plotMIwithRI;
 
 %Fig 12
 %%%%%%%%
-% Enlarge height
+% set(gcf, 'Color', 'w', 'Position', [0 2000 1400 900])
+% Move labels.
 % Move 'Sh^2_red label up a bit.
 
 

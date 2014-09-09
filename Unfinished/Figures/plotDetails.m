@@ -43,10 +43,12 @@ function plotDetails(dataset, r)
 %     set(get(cb, 'YLabel'), 'String', 'V (m s^{-1})', 'FontSize', 12);
 % 
 %     grid on
+
+ofs = -datenum(0,0,0,2, 0, 0);
 figure
     % ======= Flux
     subtightplot(7,1,1, gap, margh, margw)
-    plot(dataset.descriptors.datesen(r), dataset.flux.netheat(r), 'k', 'LineWidth', 2)
+    plot(dataset.descriptors.datesen(r)+ofs, dataset.flux.netheat(r), 'k', 'LineWidth', 2)
     grid on
     
     xlim([dataset.descriptors.datesen(r(1)+12) dataset.descriptors.datesen(r(end)-12)]);
@@ -62,12 +64,12 @@ figure
     xt = get(gca, 'xtick');
     plot(xt, 0*xt, 'k', 'LineWidth', 1.5);
     hold off
-    ylabel({'Neat Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
+    ylabel({'Net Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
     title([datestr(dataset.descriptors.datesen(r(1)), 1), '   -   ', datestr(dataset.descriptors.datesen(r(end-13)), 1)], 'FontSize', 16);
     axes_label('a)', 200, 20);
     % ======== N^2
     subtightplot(7,1,2:3, gap, margh, margw)
-    [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,   naninterpmatrix(double(log10(4*dataset.deepadcp.n2forward_sort(r,:)))'), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
+    [~, children] = contourf(dataset.descriptors.datesen(r)+ofs, dataset.deepadcp.riforwarddepths,   naninterpmatrix(double(log10(4*dataset.deepadcp.n2forward_sort(r,:)))'), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
     set(children, 'edgecolor', 'none');
 
     hold on
@@ -77,7 +79,7 @@ figure
     % plot(dataset.descriptors.datesen(r), dataset.density.isopyc(r,5), 'w', 'LineWidth', 2);
     % plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.mldT(r), 'w', 'LineWidth', 2);
 %     plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.mldT(r), 'color', [.8 .8 .8], 'LineWidth', 1.5);
-    plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
+    plot(dataset.descriptors.datesen(r)+ofs, dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
 
     colormap(jet);
     caxis([-6 -2]); 
@@ -97,7 +99,7 @@ figure
     
     % ========== Sh^2
     subtightplot(7,1,4:5, gap, margh, margw)
-    [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,  (double(log10(filter2(h, dataset.deepadcp.sh2forward(r,:))))'), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
+    [~, children] = contourf(dataset.descriptors.datesen(r)+ofs, dataset.deepadcp.riforwarddepths,  (double(log10(filter2(h, dataset.deepadcp.sh2forward(r,:))))'), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
     set(children, 'edgecolor', 'none');
     hold on
 %     contour(dataset.descriptors.datesen(r), dataset.deepadcp.fulldepths(:), dataset.density.fulldepth.fulldensityi(r, :)', eyepics, 'k');
@@ -106,7 +108,7 @@ figure
     % plot(dataset.descriptors.datesen(r), dataset.density.isopyc(r,5), 'w', 'LineWidth', 2);
     % plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.mldT(r), 'w', 'LineWidth', 2);
 %      plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.mldT(r), 'color', [.8 .8 .8], 'LineWidth', 1.5);
-    plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
+    plot(dataset.descriptors.datesen(r)+ofs, dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
 
     caxis([-6 -2]); 
     hold off
@@ -141,7 +143,7 @@ figure
 %  [~, children] = contourf(xi, yi,...
 %         zi, [-1 linspace(rilims(1), rilims(2),70)]);
     
-     [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,...
+     [~, children] = contourf(dataset.descriptors.datesen(r)+ofs, dataset.deepadcp.riforwarddepths,...
         filter2(h, rivar)', [-1 linspace(rilims(1), rilims(2),70)]);
     
     
@@ -156,7 +158,7 @@ figure
 %     contour(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths, filter2(h, naninterpmatrix(rivar')),[.25 .25], 'w');
     % plot(dataset.descriptors.datesen(r), dataset.density.isopyc(r,5), 'w', 'LineWidth', 2);
 %         plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.mldT(r), 'color', [.8 .8 .8], 'LineWidth', 1.5);
-    plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
+    plot(dataset.descriptors.datesen(r)+ofs, dataset.density.fulldepth.fullmldh(r), 'k', 'LineWidth', 2);
 
     caxis(rilims);
     xlim([dataset.descriptors.datesen(r(1)+12) dataset.descriptors.datesen(r(end)-12)]);
@@ -171,7 +173,7 @@ figure
     set(get(cb, 'YLabel'), 'String', 'Sh_{red}^2 (s^{-2})', 'FontSize', 16);
     ylabel('Depth (m)');
     ylim(ylimits);
-    xlabel('Hour UTC');
+    xlabel('Local Hour');
     axes_label('d)', 200, 20);
     % packrows(4,1);
 % colormap(cptcmap('Blre'))

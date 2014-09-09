@@ -36,7 +36,7 @@ subtightplot(5,1,1, gap, margh, margw)
     xt = get(gca, 'xtick');
     plot(xt, 0*xt, 'k', 'LineWidth', 1.5);
     hold off
-    ylabel({'Neat Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
+    ylabel({'Net Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
 
     axes_label('a)', 200, 5);
 
@@ -94,7 +94,7 @@ datetick('x', dateform, 'keeplimits', 'keepticks')
 set(gca, 'xtickLabel', []);
 
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'log10(N^2 s^{-2})', 'FontSize', 16);
+set(get(cb, 'YLabel'), 'String', 'log_{10}(N^2 s^{-2})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);
@@ -120,7 +120,7 @@ set(gca, 'xtick', datenum(2008, 10, 1:tickfreq:100),'ytick', yti);
 datetick('x', dateform, 'keeplimits', 'keepticks')
 set(gca, 'xtickLabel', [], 'FontSize', 16);
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'log10(Sh^2 s^{-2})', 'FontSize', 16);
+set(get(cb, 'YLabel'), 'String', 'log_{10}(u_z^2 s^{-2})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);
@@ -157,7 +157,7 @@ xlabel('Oct                                                                     
 axes_label('e)', 200, 5);
 
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'R-Sh^2 (s^{-2})', 'FontSize', 16);
+set(get(cb, 'YLabel'), 'String', 'Sh^2_{red} (s^{-2})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);

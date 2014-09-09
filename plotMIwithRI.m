@@ -58,7 +58,8 @@ set(gca, 'FontSize', 16, 'box', 'on');
 set(gcf, 'Color', 'w');
 legend('Trades', 'Variable', 'Location', 'NorthWest');
 xlim([-3e-3 1e-3]);
-
+ axes_label('a)', 20, 40);
+ 
 subplot(4,3,[ 2 3 5 6])
 plot(edges+diffs, ntrades, 'b', 'LineWidth', 2)
 hold on
@@ -74,7 +75,8 @@ xlim([-3e-3 3e-3]);
 v1 = vline(0, 'k');
 set(v1, 'LineWidth', 1.5);
 title(['Depth range: ', num2str(dataset.deepadcp.riforwarddepths(bins(1)), 2), ' - ', num2str(dataset.deepadcp.riforwarddepths(bins(end))), ' m'], 'FontSize', 16); 
-
+ axes_label('b)', 20, 40);
+ 
 subplot(4,3,[8 9 11 12])
 % plot([edgesri(1:end-1)+diff(edgesri)/2, edgesri(end)], ntradesri, 'b', 'LineWidth', 2)
 plot((edgesri(1:end-1)+edgesri(2:end))/2, ntradesri(1:end-1), 'b', 'LineWidth', 2);
@@ -92,7 +94,7 @@ v2 = vline(0.25, 'k');
 set(v2, 'LineWidth', 1.5);
 
 xlim([1e-2 5]);
-
+ axes_label('c)', 20, 40);
 
 
 pause;

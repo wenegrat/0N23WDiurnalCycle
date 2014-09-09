@@ -342,7 +342,9 @@ axes_label('h)', 50, 20);
 %==============
 % h(5) = subplot(5,1,5);
 axes(h(9));
-[~, children] = contourf(dataset.descriptors.datesend(dateranged), dataset.deepadcp.riforwarddepths(1:10), (1e3*(averageDaily(dataset.deepadcp.riforwardreduce_sort(:,1:10), 1:10, dataset.descriptors.datesen))'), 12);
+[~, children] = contourf(dataset.descriptors.datesend(dateranged), dataset.deepadcp.riforwarddepths(1:10), (1e3*(medianDaily(dataset.deepadcp.riforwardreduce_sort(:,1:10), 1:10, dataset.descriptors.datesen))'), 12);
+% [~, children] = contourf(dataset.descriptors.datesen(daterange), dataset.deepadcp.riforwarddepths(1:10), 1e3*dataset.deepadcp.riforwardreduce_sort(:,1:10)', linspace(-3,3, 12));
+
 grid on
 
 
@@ -355,6 +357,8 @@ cb = colorbar;
 ylabel({'Sh^2_{red}', 'Depth (m)'}, 'FontSize', 12);
 set(get(cb, 'YLabel'), 'String', ' \times 10^{-3} (s^{-2})');
 hold on
+% contour(dataset.descriptors.datesen(daterange), dataset.deepadcp.riforwarddepths(1:10), 1e3*dataset.deepadcp.riforwardreduce_sort(:,1:10)', [0 0], 'w', 'LineWidth', 2);
+
 plot(dataset.descriptors.datesend(:), averagedaily(dataset.density.fulldepth.mldT, 1,dataset.descriptors.datesen), '-w', 'LineWidth', 2);
 plot(dataset.descriptors.datesend(:), averagedaily(dataset.density.fulldepth.mldT, 1,dataset.descriptors.datesen), '--k', 'LineWidth', 2);
 
@@ -380,10 +384,14 @@ for i=1:10
 %         ph = plot(px, py, 'Color', [.8 .8 .8]);
 %     end
 end
-% set(cb, 'YTick', 24:.5:25.5)
+% % set(cb, 'YTick', 24:.5:25.5)
 caxis([-4 1.5]);
 set(cb, 'YtickMode', 'manual');
 set(cb, 'YTick', [-4 -2 0 1]);
+
+% caxis([-1.5 1]);
+% % set(cb, 'YtickMode', 'manual');
+% % set(cb, 'YTick', [-3 -1.5 0 1.5 3]);
 ty = ylim;
 % text(zz(1)+depthtitleoffset(1), ty(1) + depthtitleoffset(2), ['Bins
 % '],...
