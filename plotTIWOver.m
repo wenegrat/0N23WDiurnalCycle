@@ -16,10 +16,11 @@ mlw = 1.6;
 
 h = .5*ones(3); h(2,2) = 1; h = 1/5 * h; %Weight center position most
 h = 1;
-gap=[.03 .1]; margh=.2; margw  = .1;
+gap=[.02 .05]; margh=.2; margw  = .1;
 figure
 
-subtightplot(5,1,1, gap, margh, margw)
+%===================== Heat Flux ======================
+subtightplot(6,1,1, gap, margh, margw)
     plot(dataset.descriptors.datesen(r), dataset.flux.netheat(r), 'k', 'LineWidth', 2)
     grid on
     
@@ -39,8 +40,33 @@ subtightplot(5,1,1, gap, margh, margw)
     ylabel({'Net Heat Flux', 'W m^{-2}'}, 'FontSize', 16);
 
     axes_label('a)', 200, 5);
+    axes_label('b)', 210, 5);
+    axes_label('c)', 220, 5);
+    axes_label('d)', 230, 5);
+    axes_label('e)', 240, 5);
+    fl = axes_label('f)', 250, 5);
 
-subtightplot(5,1,2, gap, margh, margw)
+%===================== SST ======================
+subtightplot(6,1,2, gap, margh, margw)
+    plot(dataset.descriptors.datesen(r), dataset.density.fulldepth.temps(1,r), 'k', 'LineWidth', 2)
+    grid on
+    
+    xlim([dataset.descriptors.datesen(r(1)) dataset.descriptors.datesen(r(end))]);
+    set(gca, 'xtick', datenum(2008, 10, 1:tickfreq:100), 'FontSize', 12);
+
+    datetick('x', dateform, 'keeplimits', 'keepticks')
+    set(gca, 'xtickLabel', [], 'FontSize', 16);
+    cb = colorbar;
+    set(cb, 'visible', 'off');
+    ylim([26 28.5]);
+    set(gca, 'ytick', 26:.5:28.5, 'yticklabel', {'26', [], '27' ,  [], '28', []});
+    hold on
+    hold off
+    ylabel({'SST', '^{\circ}C'}, 'FontSize', 16);
+%     xlabel('SST', 'FontSize', 16);
+    
+%========== Merid Vel ===================
+subtightplot(6,1, 3, gap, margh, margw)
 % plot(dataset.descriptors.datesen(r), nanmean(dataset.measures.Nmmpersecih(r,1:35), 2)/1000, 'k', 'LineWidth', 2);
 
 [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.fulldepths(1:50),  filter2(h, naninterpmatrix(dataset.deepadcp.fullv(r,1:50)')));  set(gca, 'ydir', 'reverse')
@@ -67,12 +93,13 @@ caxis([-.5 .5]);
 % set(children, 'edgecolor', 'none');
 
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'V (m s^{-1})', 'FontSize', 16);
+set(get(cb, 'XLabel'), 'String', 'V (m s^{-1})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 grid on
-axes_label('b)', 200, 5);
 
-subtightplot(5,1,3, gap, margh, margw)
+
+%============== N2 =================
+subtightplot(6,1,4, gap, margh, margw)
 [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,  filter2(h, naninterpmatrix(double(log10(dataset.deepadcp.n2forward(r,:)))')), [-10 -6:.125:-2]);  set(gca, 'ydir', 'reverse')
 set(children, 'edgecolor', 'none');
 
@@ -94,14 +121,14 @@ datetick('x', dateform, 'keeplimits', 'keepticks')
 set(gca, 'xtickLabel', []);
 
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'log_{10}(N^2 s^{-2})', 'FontSize', 16);
+set(get(cb, 'XLabel'), 'String', 'log_{10}(N^2 s^{-2})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);
 grid on
-axes_label('c)', 200, 5);
 
-subtightplot(5,1,4, gap, margh, margw)
+%================= Sh^2 =================
+subtightplot(6,1,5, gap, margh, margw)
 [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,  filter2(h, naninterpmatrix(double(log10(dataset.deepadcp.sh2forward(r,:)))')), [-10 -6:.5:-2]);  set(gca, 'ydir', 'reverse')
 set(children, 'edgecolor', 'none');
 hold on
@@ -120,19 +147,19 @@ set(gca, 'xtick', datenum(2008, 10, 1:tickfreq:100),'ytick', yti);
 datetick('x', dateform, 'keeplimits', 'keepticks')
 set(gca, 'xtickLabel', [], 'FontSize', 16);
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'log_{10}(u_z^2 s^{-2})', 'FontSize', 16);
+set(get(cb, 'XLabel'), 'String', 'log_{10}(u_z^2 s^{-2})', 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);
 grid on
-axes_label('d)', 200, 5);
 
 
-subtightplot(5,1,5, gap, margh, margw)
+% ===================== Sh^2_red ===============
+subtightplot(6,1,6, gap, margh, margw)
 rivar = naninterpmatrix(double(dataset.deepadcp.riforwardreduce_sort(r,1:10))');
 % [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.fulldepths(dataset.deepadcp.riforwarddepthmask(depthrange)),  double(dataset.deepadcp.riforwardreduce(r,depthrange))');  set(gca, 'ydir', 'reverse')
 [~, children] = contourf(dataset.descriptors.datesen(r), dataset.deepadcp.riforwarddepths,...
-    filter2(h, naninterpmatrix(dataset.deepadcp.riforwardreduce_sort(r,:)')), [-1e-1 linspace(-2e-3, 2e-3,15)]);
+    filter2(h, 10^3.*naninterpmatrix(dataset.deepadcp.riforwardreduce_sort(r,:)')), 10^3.*[-1e-1 linspace(-2e-3, 2e-3,15)]);
 %     filter2(h, naninterpmatrix(double((dataset.deepadcp.sh2forward(r,:)))'))./filter2(h, naninterpmatrix(double((dataset.deepadcp.n2forward(r,:)))')), 0:.25:8);
 set(gca, 'ydir', 'reverse')
 
@@ -145,7 +172,7 @@ contour(dataset.descriptors.datesen(r), dataset.deepadcp.fulldepths(:), dataset.
 % plot(dataset.descriptors.datesen(r), dataset.density.isopyc(r,5), 'w', 'LineWidth', 2);
 plot(dataset.descriptors.datesen(r), mlddef(r), 'k', 'LineWidth', mlw);
 % caxis([0 8]); 
-caxis([-2e-3 2e-3]);
+caxis([-2e-3 2e-3].*10^3);
 xlim(dataset.descriptors.datesen(r([1 end])))
 grid on
 hold off
@@ -154,10 +181,9 @@ set(gca, 'xtick', datenum(2008, 10, 1:tickfreq:100),'ytick', yti, 'FontSize', 16
 datetick('x', dateform, 'keeplimits', 'keepticks')
 % set(get(gca, 'xlabel'), 'FontSize', 10);
 xlabel('Oct                                                                                     Nov', 'FontSize', 16)
-axes_label('e)', 200, 5);
 
 cb = colorbar;
-set(get(cb, 'YLabel'), 'String', 'Sh^2_{red} (s^{-2})', 'FontSize', 16);
+set(get(cb, 'XLabel'), 'String', {'10^3 \times Sh^2_{red}', '(s^{-2})'}, 'FontSize', 16);
 set(cb, 'FontSize', 16)
 ylabel('Depth (m)');
 ylim(ylimits);

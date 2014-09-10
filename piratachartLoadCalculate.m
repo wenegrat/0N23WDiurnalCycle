@@ -2,15 +2,18 @@
 %==================LOCATION CHART =====================================
 % Calculate variables necessary for piratachart_wSST.m
 
+%http://www.esrl.noaa.gov/psd/data/gridded/data.noaa.oisst.v2.html
 sstclim = ncdfread('/Users/JacobWenegrat/Documents/Sentinel/PIRATADATA/LongTimeSeries/ClimateIndices/sst.wkmean.1990-present.nc');
 sstclim.sst(sstclim.sst>30000) = NaN;
 ssttimes = datenum(1800,1,1+datenum(sstclim.time));
+
+tinds = 471:1253; %1999 - 2014 (not including 2014).
 
 sstclim.sst = double(.01* sstclim.sst);
 sst = NaN(360, 180, 12);
 for i=1:360
     for j=1:180
-        sst(i,j,:) = averageMonthly(squeeze(sstclim.sst(i,j,:)), ssttimes);
+        sst(i,j,:) = averageMonthly(squeeze(sstclim.sst(i,j,tinds)), ssttimes(tinds));
     end
 end
 sstclim.lon(sstclim.lon>180) = sstclim.lon(sstclim.lon>180) - 360;
@@ -87,7 +90,7 @@ end
  olr = NaN(144, 73, 12);
  for i=1:144
      for j= 1:73
-         olr(i,j,:) = averageMonthly(double(squeeze(tempOLR(i,j,:))), tempDates);
+         olr(i,j,:) = averageMonthly(double(squeeze(tempOLR(i,j,296:end))), tempDates(296:end));
      end
  end
  olrlat = dataolr.lat;

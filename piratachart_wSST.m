@@ -3,7 +3,7 @@
 % Make Fig. 1 for Wenegrat & McPhaden 2014
 
 
-qscale = 20;
+qscale = 30;
 ledge = -45;
 qlw = 1.25; %quiver plot arrow thickness
 
@@ -23,7 +23,7 @@ locs = [lt(1) lats(end-1); lt(1) lats(end-2); lt(1) lats(end-3); lt(1) lats(end-
     0 0; ...
     lt(9) -6];
 
-gap = [.1 .03]; margh = .1; margw = .1;
+gap = [.1 .02]; margh = .1; margw = .1;
 
 subtightplot(2,1,1, gap, margh, margw)
 m_proj('Mercator', 'longitudes', [ledge 15], 'latitudes', [-22 22]);
@@ -46,14 +46,14 @@ m_grid('xtick', 7, 'ytick', 5, 'box', 'fancy', 'FontSize', 16);
 set(gca, 'FontSize', 16);
 
 hold on
-m_quiver(-6, 17.5, .1*qscale, 0, 0,'k', 'linewidth', qlw);
+m_quiver(-6.5, 17.5, .1*qscale, 0, 0,'k', 'linewidth', qlw);
 m_text(-8, 16, '.1 N m^{-2}', 'FontSize', 14);
 hold off
 set(gca, 'clim', [20 30]);
 colormap(cptcmap('temperature'));
 cb = colorbar;
 set(get(cb, 'ylabel'), 'String', '^{\circ}C');
-set(cb, 'Position', [.6 .7 .016 .1]);
+set(cb, 'Position', [.6 .7 .016 .09]);
 
 set(gcf, 'Color', 'w');
 set(gca, 'clim', [20 30]);
@@ -82,14 +82,14 @@ m_grid('xtick', 7, 'ytick', 5, 'box', 'fancy', 'FontSize', 16);
 set(gca, 'FontSize', 16);
 
 hold on
-m_quiver(-6, 17.5, .1*qscale, 0, 0,'k', 'linewidth', qlw);
+m_quiver(-6.5, 17.5, .1*qscale, 0, 0,'k', 'linewidth', qlw);
 m_text(-8, 16, '.1 N m^{-2}', 'FontSize', 14);
 hold off
 set(gca, 'clim', [20 30]);
 colormap(cptcmap('temperature'));
 cb = colorbar;
 set(get(cb, 'ylabel'), 'String', '^{\circ}C');
-set(cb, 'Position', [.6 .32 .016 .1]);
+set(cb, 'Position', [.6 .32 .016 .09]);
 axes_label('b)', 20, 20);
 
 set(gcf, 'Color', 'w');

@@ -67,7 +67,7 @@ shratiocompare;
 % Figure 1 
 % Map of PIRATA array and location of mooring
 %==========================================================================
-piratachart_wSST;
+piratachart_wSST; %Still needs finalizing.
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,7 +87,7 @@ plot23Long(data23);
 % Figure 3
 % Climatology: Wind, SWR, dSST
 %==========================================================================
-plot23ClimSWR(data23)
+plot23ClimSWR_wError(data23)
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,6 +220,10 @@ plotMIwithRI;
 % Instructions for manual changes to figures prior to saving.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%Fig 1
+%%%%%%%%
+% Move colorbars up and align to grid.
+
 %Fig 2
 %%%%%%%%
 % Adjust labels (use align grid)
